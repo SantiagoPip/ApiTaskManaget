@@ -3,23 +3,25 @@ package com.santiago.api.task.TaskManager.entities;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "tasks")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
     private String name;
     private String description;
     private String status;
     @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
     public Task() {}
     public Task(String id, String name, String description, String status) {}
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

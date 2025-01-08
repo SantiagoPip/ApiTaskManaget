@@ -1,9 +1,7 @@
 package com.santiago.api.task.TaskManager.services;
 
 import com.santiago.api.task.TaskManager.entities.User;
-import com.santiago.api.task.TaskManager.repositories.TaskRepository;
 import com.santiago.api.task.TaskManager.repositories.UserRepostory;
-import org.hibernate.annotations.SecondaryRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
