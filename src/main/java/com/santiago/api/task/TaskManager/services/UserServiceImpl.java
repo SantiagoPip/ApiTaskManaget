@@ -26,4 +26,14 @@ public class UserServiceImpl implements UserService {
     public boolean existUser(String username) {
         return false;
     }
+
+    @Override
+    public void deleteUser(Long id) {
+
+    }
+
+    @Override
+    public void updateUser(User user) {
+
+    }
 }
