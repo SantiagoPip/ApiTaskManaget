@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface UserRepostory extends CrudRepository<User, Integer> {
+public interface UserRepostory extends CrudRepository<User, Long> {
     @Query("select u from User u where u.id = ?1")
     Optional<User> getUserById(Long id);
 }

@@ -1,5 +1,6 @@
 package com.santiago.api.task.TaskManager.controllers;
 
+import com.santiago.api.task.TaskManager.entities.Task;
 import com.santiago.api.task.TaskManager.entities.User;
 import com.santiago.api.task.TaskManager.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,10 @@ public class UserController {
     @PostMapping
     public User createUser(@RequestBody  User user) {
         return userService.saveUser(user);
-
+    }
+    @GetMapping("/tasks/{userid}")
+    public List<Task>getTasksByUser(@PathVariable Long userid) {
+        return userService.getTasksByUser(userid);
     }
 
 }

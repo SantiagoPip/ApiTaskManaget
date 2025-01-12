@@ -1,5 +1,6 @@
 package com.santiago.api.task.TaskManager.services;
 
+import com.santiago.api.task.TaskManager.entities.Task;
 import com.santiago.api.task.TaskManager.entities.User;
 import com.santiago.api.task.TaskManager.repositories.UserRepostory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +29,29 @@ public class UserServiceImpl implements UserService {
         return userRepostory.getUserById(id);
     }
 
-
-
     @Override
     public void deleteUser(Long id) {
-
+        Optional<User> user = userRepostory.findById(id);
+        if (user.isPresent()) {
+            userRepostory.delete(user.get());
+        } else {
+            throw new RuntimeException("User not found with ID: " + id);
+        }
     }
+
 
     @Override
     public void updateUser(User user) {
 
+    }
+
+    @Override
+    public List<Task> getTasksByUser(Long id) {
+        Optional<User>userOptional = userRepostory.getUserById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return user.getTasks();
+        }
+         throw new RuntimeException("User not found with ID: " + id);
     }
 }

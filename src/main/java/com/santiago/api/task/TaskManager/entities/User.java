@@ -10,7 +10,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String name;
     private String email;
     private String password;
@@ -61,5 +61,17 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    public void addTask(Task task) {
+        this.tasks.add(task);
+        task.setUser(this);
+
+
+    }
+
+    public List<Task> getTasks() {
+        return
+                tasks;
     }
 }

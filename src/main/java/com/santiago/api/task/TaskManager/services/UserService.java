@@ -1,5 +1,6 @@
 package com.santiago.api.task.TaskManager.services;
 
+import com.santiago.api.task.TaskManager.entities.Task;
 import com.santiago.api.task.TaskManager.entities.User;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface UserService {
     Optional<User>getUserById(Long id);
     void deleteUser(Long id);
     void updateUser(User user);
+    List<Task>getTasksByUser(Long user);
 }

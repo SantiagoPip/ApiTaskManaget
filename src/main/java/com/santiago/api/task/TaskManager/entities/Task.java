@@ -15,7 +15,12 @@ public class Task {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     public Task() {}
-    public Task(String id, String name, String description, String status) {}
+    public Task(
+            String name, String description, String status) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+    }
 
     public Long getId() {
         return id;
@@ -57,5 +62,9 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

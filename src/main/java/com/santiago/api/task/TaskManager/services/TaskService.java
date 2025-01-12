@@ -11,5 +11,5 @@ public interface TaskService {
     Optional<Task> getTaskById(Long id);
     Task saveTask(Task task);
     void deleteTask(Task task);
-
+    Task addTaskUser(Long idUser, Task task);
 }
