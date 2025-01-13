@@ -10,7 +10,8 @@ public class Task {
     private Long id;
     private String name;
     private String description;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private TaskStatus taskStatus;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -19,7 +20,7 @@ public class Task {
             String name, String description, String status) {
         this.name = name;
         this.description = description;
-        this.status = status;
+        this.taskStatus = TaskStatus.PENDING;
     }
 
     public Long getId() {
@@ -46,12 +47,12 @@ public class Task {
         this.description = description;
     }
 
-    public String getStatus() {
-        return status;
+    public TaskStatus getStatus() {
+        return taskStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(TaskStatus status) {
+        this.taskStatus = status;
     }
 
     @Override
@@ -60,7 +61,7 @@ public class Task {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
+                ", status='" + taskStatus + '\'' +
                 '}';
     }
 
