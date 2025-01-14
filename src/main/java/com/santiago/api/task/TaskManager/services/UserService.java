@@ -14,4 +14,5 @@ public interface UserService {
     void deleteUser(Long id);
     void updateUser(User user);
     List<Task>getTasksByUser(Long user);
+    Optional<User>getUserByUsername(String username);
 }

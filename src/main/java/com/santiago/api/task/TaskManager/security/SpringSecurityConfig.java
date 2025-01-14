@@ -12,7 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.http.HttpMethod;
 
 @Configuration
-@EnableMethodSecurity(prePostEnabled=true)
+@EnableWebSecurity
 public class SpringSecurityConfig {
     @Bean
     PasswordEncoder passwordEncoder() {

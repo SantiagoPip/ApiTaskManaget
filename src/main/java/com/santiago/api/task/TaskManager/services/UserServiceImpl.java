@@ -59,4 +59,9 @@ public class UserServiceImpl implements UserService {
         }
          throw new RuntimeException("User not found with ID: " + id);
     }
+
+    @Override
+    public Optional<User> getUserByUsername(String username) {
+        return userRepostory.findUsername(username);
+    }
 }
