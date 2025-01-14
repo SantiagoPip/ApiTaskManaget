@@ -33,17 +33,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        User user = null;
+        User user;
         String username = null;
         String password = null;
+        System.out.println("En el intento de autenticacion");
         try{
             user = new ObjectMapper().readValue(request.getInputStream(),User.class);
             username =user.getName();
+            System.out.println(username+"uasurio nomrbe");
             password =user.getPassword();
-        }catch (Exception e){}
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new AuthenticationException("Error al procesar la solicitud de autenticación") {};
+        }
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
                 password);
-
+        System.out.println(authenticationToken);
         return authenticationManager.authenticate(authenticationToken);
 
     }
@@ -51,6 +56,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authResult.getPrincipal();
+        System.out.println(" token de autenticacion");
+
         String username = user.getUsername();
         Collection<? extends GrantedAuthority> roles =authResult.getAuthorities();
         Claims claims = Jwts.claims().add("authorities",new ObjectMapper().writeValueAsString(roles))

@@ -43,8 +43,6 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("User not found with ID: " + id);
         }
     }
-
-
     @Override
     public void updateUser(User user) {
 
