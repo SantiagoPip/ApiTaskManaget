@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,10 +22,18 @@ public class TaskController {
     private TaskService taskService;
 
 
-    @GetMapping
+
+
+    @GetMapping("all")
     public List<Task>getAllTasks(){
         return taskService.getAllTasks();
     }
+    @GetMapping()
+    public List<Task> getTasks(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return taskService.getTasksByUserName(username);
+    }
+
     @PostMapping("/user/{userId}")
     public ResponseEntity<?>addTaskUser(@PathVariable Long userId, @RequestBody Task task){
         Task taskUser = taskService.addTaskUser(userId,task);

@@ -1,6 +1,7 @@
 package com.santiago.api.task.TaskManager.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.santiago.api.task.TaskManager.security.SimpleGrantedAuthorityJsonCreator;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -38,17 +39,28 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
             return;
         }
         String token = header.replace(PREFIX_TOKEN, "");
+
         try{
-            Claims claims = Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).getPayload();
+            System.out.println("Ingresando al try del claims");
+            Claims claims = Jwts.parser()
+                    .verifyWith(SECRET_KEY).build()
+                    .parseSignedClaims(token).getPayload();
+            System.out.println(claims+"  este es el token que se esta validando");
+
             String uername = claims.getSubject();
+
             Object authoritiesClaims = claims.get("authorities");
-            Collection<? extends GrantedAuthority>authorities = Arrays.asList(
-                    new ObjectMapper().addMixIn(SimpleGrantedAuthority.class, SimpleGrantedAuthorityMixin.class)
-                            .readValue(authoritiesClaims.toString().getBytes(),SimpleGrantedAuthority[].class)
+
+            Collection<? extends GrantedAuthority> authorities = Arrays.asList(
+                    new ObjectMapper()
+                            .addMixIn(SimpleGrantedAuthority.class,
+                                    SimpleGrantedAuthorityJsonCreator.class)
+                            .readValue(authoritiesClaims.toString().getBytes(), SimpleGrantedAuthority[].class)
             );
+
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(uername, null, authorities);
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-chain.doFilter(request, response);
+            SecurityContextHolder .getContext().setAuthentication(authenticationToken);
+            chain.doFilter(request, response);
 
         }catch (JwtException e){
             Map<String, String> body = new HashMap<>();

@@ -74,4 +74,15 @@ public class TaskServiceImpl implements TaskService {
 
     }
 
+    @Override
+    public List<Task> getTasksByUserName(String username) {
+        Optional<User> userOptional = userRepostory.findUsername(username);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return user.getTasks();
+        } else{
+        throw new RuntimeException("Task not found with ID: " + username);
+    }
+    }
+
 }

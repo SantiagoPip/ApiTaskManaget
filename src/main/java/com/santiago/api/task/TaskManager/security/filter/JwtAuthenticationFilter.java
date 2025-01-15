@@ -60,14 +60,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String username = user.getUsername();
         Collection<? extends GrantedAuthority> roles =authResult.getAuthorities();
-        Claims claims = Jwts.claims().add("authorities",new ObjectMapper().writeValueAsString(roles))
+        Claims claims = Jwts.claims()
+                .add("authorities",new ObjectMapper()
+                        .writeValueAsString(roles))
                 .add("username",username).build();
         String token =Jwts.builder()
                 .subject(username)
                 .claims(claims)
-                .expiration(new Date(System.currentTimeMillis()+36000))
+                .expiration(new Date(System.currentTimeMillis()+3600000 ))
                 .issuedAt(new Date())
-                .signWith(SECRET_KEY)
+                .signWith(SECRET_KEY,Jwts.SIG.HS256)
                 .compact();
         response.addHeader(HEADER_AUTHORIZATION, PREFIX_TOKEN+token);
         Map<String,String>body = new HashMap<>();
