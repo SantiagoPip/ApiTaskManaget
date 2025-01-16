@@ -37,20 +37,29 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String username = null;
         String password = null;
         System.out.println("En el intento de autenticacion");
-        try{
-            user = new ObjectMapper().readValue(request.getInputStream(),User.class);
-            username =user.getName();
-            System.out.println(username+"uasurio nomrbe");
-            password =user.getPassword();
-        }catch (Exception e){
+        try {
+            user = new ObjectMapper().readValue(request.getInputStream(), User.class);
+            username = user.getName();
+            password = user.getPassword();
+            System.out.println("Usuario: " + username);
+            System.out.println("Contraseña recibida: " + (password != null ? "NO NULA" : "NULA"));
+
+        } catch (Exception e) {
+            System.out.println("Error en la autenticación: " + e.getMessage());
             e.printStackTrace();
             throw new AuthenticationException("Error al procesar la solicitud de autenticación") {};
         }
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
-                password);
-        System.out.println(authenticationToken);
-        return authenticationManager.authenticate(authenticationToken);
 
+        try {
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+            System.out.println("Token creado: " + authenticationToken);
+            Authentication result = authenticationManager.authenticate(authenticationToken);
+            System.out.println("Resultado de autenticación: " + result);
+            return result;
+        } catch (AuthenticationException e) {
+            System.out.println("Error durante la autenticación: " + e.getMessage());
+            throw e;
+        }
     }
 
     @Override
@@ -59,6 +68,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         System.out.println(" token de autenticacion");
 
         String username = user.getUsername();
+        System.out.println("Usuario: " + username+ " usuario nombre en el successfulauthentication");
         Collection<? extends GrantedAuthority> roles =authResult.getAuthorities();
         Claims claims = Jwts.claims()
                 .add("authorities",new ObjectMapper()
