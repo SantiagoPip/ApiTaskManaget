@@ -14,9 +14,17 @@ public class User {
     private String name;
     private String email;
     private String password;
-
+    @ManyToMany
+    @JoinTable(name = "users_roles",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "role_id"),
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id","role_id"})})
+    private List<Role> roles;
+    @Transient
+    private boolean isAdmin;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task>tasks;
+    private boolean enabled;
     public User( String name, String email, String password) {
 
         this.name = name;
@@ -28,7 +36,9 @@ public class User {
     public User() {
         this.tasks= new ArrayList<>();
     }
-
+    public boolean isAdmin() {
+        return isAdmin;
+    }
     public String getName() {
         return name;
     }
@@ -73,5 +83,21 @@ public class User {
     public List<Task> getTasks() {
         return
                 tasks;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }

@@ -1,12 +1,15 @@
 package com.santiago.api.task.TaskManager.services;
 
+import com.santiago.api.task.TaskManager.entities.Role;
 import com.santiago.api.task.TaskManager.entities.Task;
 import com.santiago.api.task.TaskManager.entities.User;
+import com.santiago.api.task.TaskManager.repositories.RoleRepository;
 import com.santiago.api.task.TaskManager.repositories.UserRepostory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +19,8 @@ public class UserServiceImpl implements UserService {
     private UserRepostory userRepostory;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public List<User> userList() {
@@ -24,6 +29,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveUser(User user) {
+        Optional<Role>optionalRoleUser = roleRepository.findByName("ROLE_USER");
+        List<Role>roles = new ArrayList<>();
+        optionalRoleUser.ifPresent(roles::add);
+        if(user.isAdmin()){
+            Optional<Role> optionalRoleAdmin = roleRepository.findByName("ROLE_ADMIN");
+            optionalRoleAdmin.ifPresent(roles::add);
+        }
+        user.setRoles(roles);
         String passwordEncoded = passwordEncoder.encode(user.getPassword());
         user.setPassword(passwordEncoded);
         return userRepostory.save(user);
