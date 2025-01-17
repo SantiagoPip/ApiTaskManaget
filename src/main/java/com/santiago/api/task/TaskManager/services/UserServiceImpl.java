@@ -32,11 +32,14 @@ public class UserServiceImpl implements UserService {
         Optional<Role>optionalRoleUser = roleRepository.findByName("ROLE_USER");
         List<Role>roles = new ArrayList<>();
         optionalRoleUser.ifPresent(roles::add);
+        System.out.println(user.isAdmin()+"is admiiiiiiin");
+
         if(user.isAdmin()){
             Optional<Role> optionalRoleAdmin = roleRepository.findByName("ROLE_ADMIN");
             optionalRoleAdmin.ifPresent(roles::add);
         }
         user.setRoles(roles);
+        System.out.println(roles + "creado");
         String passwordEncoded = passwordEncoder.encode(user.getPassword());
         user.setPassword(passwordEncoded);
         return userRepostory.save(user);

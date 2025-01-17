@@ -70,10 +70,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String username = user.getUsername();
         System.out.println("Usuario: " + username+ " usuario nombre en el successfulauthentication");
         Collection<? extends GrantedAuthority> roles =authResult.getAuthorities();
+        System.out.println("roles al generar el token "+roles);
         Claims claims = Jwts.claims()
-                .add("authorities",new ObjectMapper()
-                        .writeValueAsString(roles))
-                .add("username",username).build();
+                .add("authorities", new ObjectMapper().writeValueAsString(roles))
+                .add("username",username)
+                .build();
         String token =Jwts.builder()
                 .subject(username)
                 .claims(claims)

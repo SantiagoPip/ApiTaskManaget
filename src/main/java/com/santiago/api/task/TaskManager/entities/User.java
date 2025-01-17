@@ -20,17 +20,17 @@ public class User {
     inverseJoinColumns = @JoinColumn(name = "role_id"),
     uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id","role_id"})})
     private List<Role> roles;
-    @Transient
     private boolean isAdmin;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task>tasks;
     private boolean enabled;
-    public User( String name, String email, String password) {
+    public User( String name, String email, String password,boolean isAdmin) {
 
         this.name = name;
         this.email = email;
         this.password = password;
         this.tasks = new ArrayList<Task>();
+        this.isAdmin = isAdmin;
     }
 
     public User() {
@@ -83,6 +83,10 @@ public class User {
     public List<Task> getTasks() {
         return
                 tasks;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.isAdmin = admin;
     }
 
     public boolean isEnabled() {

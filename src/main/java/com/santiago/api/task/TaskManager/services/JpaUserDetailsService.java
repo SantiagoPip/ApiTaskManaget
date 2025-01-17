@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class JpaUserDetailsService implements UserDetailsService {
@@ -29,7 +30,9 @@ public class JpaUserDetailsService implements UserDetailsService {
         User user = userOptional.orElseThrow();
 
         // Lista de roles genéricos
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        List<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(role->new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
 
         return new org.springframework.security.core.userdetails.User(
                 user.getName(),
